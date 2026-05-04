@@ -152,7 +152,52 @@ const styles = `
   .footer-copy { color: #8899bb; font-size: 0.78rem; }
 
   @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-  @media (max-width: 640px) { .nav-links { display: none; } .form-grid { grid-template-columns: 1fr; } .contact-wrap { padding: 32px 20px; } }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    nav { padding: 16px 5vw; }
+
+    .hero { padding-top: 100px; padding-left: 5vw; padding-right: 5vw; padding-bottom: 40px; min-height: auto; }
+    .hero h1 { font-size: clamp(2.2rem, 11vw, 3.5rem); letter-spacing: -1px; }
+    .hero-sub { font-size: 0.95rem; margin-top: 20px; }
+    .hero-btns { flex-direction: column; align-items: center; gap: 12px; margin-top: 28px; }
+    .btn-primary, .btn-outline { width: 100%; max-width: 300px; text-align: center; }
+    .hero-3d { gap: 12px; margin-top: 40px; }
+    .stat-chip { padding: 14px 18px; }
+    .stat-num { font-size: 1.5rem; }
+
+    .services { padding: 60px 5vw; }
+    .pricing { padding: 60px 5vw; }
+    .skills-sec { padding: 50px 5vw; }
+    .contact-sec { padding: 50px 5vw 40px; }
+    .section-title { margin-bottom: 36px; }
+    .section-title h2 { font-size: clamp(1.6rem, 7vw, 2.2rem); }
+
+    .cards-grid { grid-template-columns: 1fr; gap: 16px; }
+    .service-card { padding: 24px 20px; }
+
+    .pricing-grid { grid-template-columns: 1fr; gap: 20px; }
+    .price-card { padding: 28px 22px; }
+    .price-amount { font-size: 2.4rem; }
+
+    .info-strip { margin: 0 5vw 50px; }
+
+    .contact-wrap { padding: 28px 18px; }
+    .contact-wrap h2 { font-size: 1.6rem; }
+    .form-grid { grid-template-columns: 1fr; gap: 14px; }
+    .contact-links { flex-direction: column; align-items: center; gap: 10px; }
+    .contact-link { width: 100%; max-width: 300px; justify-content: center; }
+
+    footer { flex-direction: column; align-items: center; text-align: center; gap: 12px; padding: 20px 5vw; }
+    .footer-links { gap: 16px; flex-wrap: wrap; justify-content: center; }
+
+    .whatsapp-fab { bottom: 20px; right: 20px; }
+    .wa-btn { width: 52px; height: 52px; }
+    .wa-btn svg { width: 26px; height: 26px; }
+
+    .cursor, .cursor-ring { display: none; }
+    body { cursor: auto; }
+  }
 `;
 
 // ── Stars canvas
@@ -239,10 +284,25 @@ function ContactForm() {
   const [sending, setSending] = useState(false);
 
   const handle = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
-  const submit = e => {
+  const submit = async e => {
     e.preventDefault();
     setSending(true);
-    setTimeout(() => { setSending(false); setSent(true); }, 1400);
+    try {
+      const res = await fetch("https://formspree.io/f/mwvylnlj", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form)
+      });
+      if (res.ok) {
+        setSent(true);
+      } else {
+        alert("Something went wrong. Please try again or contact via WhatsApp.");
+      }
+    } catch {
+      alert("Network error. Please try again.");
+    } finally {
+      setSending(false);
+    }
   };
 
   if (sent) return (
