@@ -1,18 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 
-/* const COLORS = {
-  bg: "#050a18",
-  navy: "#0a1428",
-  card: "#0d1a30",
-  green: "#00e676",
-  green2: "#00c853",
-  purple: "#7c4dff",
-  purple2: "#b388ff",
-  text: "#e8eaf6",
-  muted: "#8899bb",
-  border: "rgba(124,77,255,0.25)",
-}; */
-
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
 
@@ -124,7 +111,6 @@ const styles = `
   .skill-tag { background: #0d1a30; border: 1px solid rgba(124,77,255,0.25); border-radius: 50px; padding: 10px 22px; font-size: 0.85rem; color: #e8eaf6; transition: all 0.2s; cursor: default; }
   .skill-tag:hover { border-color: #00e676; color: #00e676; transform: translateY(-2px); }
 
-  /* CONTACT FORM */
   .contact-sec { padding: 80px 6vw 60px; position: relative; z-index: 2; }
   .contact-wrap { max-width: 680px; margin: 0 auto; background: #0d1a30; border: 1px solid rgba(124,77,255,0.25); border-radius: 28px; padding: 56px 48px; box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 60px rgba(0,230,118,0.05); }
   .contact-wrap h2 { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 10px; text-align: center; }
@@ -152,7 +138,6 @@ const styles = `
   .contact-link { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.04); border: 1px solid rgba(124,77,255,0.25); border-radius: 50px; padding: 12px 22px; text-decoration: none; color: #e8eaf6; font-size: 0.85rem; transition: all 0.2s; }
   .contact-link:hover { border-color: #00e676; color: #00e676; transform: translateY(-2px); }
 
-  /* WHATSAPP FAB */
   .whatsapp-fab { position: fixed; bottom: 32px; right: 32px; z-index: 500; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
   .wa-tooltip { background: #0d1a30; border: 1px solid rgba(0,230,118,0.3); border-radius: 12px; padding: 10px 16px; font-size: 0.82rem; color: #e8eaf6; white-space: nowrap; box-shadow: 0 4px 20px rgba(0,0,0,0.4); animation: fadeUp 0.3s ease; }
   .wa-btn { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #25d366, #128c7e); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 20px rgba(37,211,102,0.4), 0 0 0 0 rgba(37,211,102,0.4); animation: waPulse 2.5s infinite; text-decoration: none; transition: transform 0.2s; border: none; }
@@ -209,7 +194,7 @@ function Cursor() {
   return (<><div className="cursor" ref={cursorRef} /><div className="cursor-ring" ref={ringRef} /></>);
 }
 
-// ── 3D tilt hook
+// ── 3D tilt hook — ref is stable, so it's safe to pass as a dep
 function use3DTilt(ref) {
   useEffect(() => {
     const el = ref.current; if (!el) return;
@@ -217,8 +202,9 @@ function use3DTilt(ref) {
     const out = () => { el.style.transform = ""; };
     el.addEventListener("mousemove", over); el.addEventListener("mouseleave", out);
     return () => { el.removeEventListener("mousemove", over); el.removeEventListener("mouseleave", out); };
-  }, []);
+  }, [ref]); // ✅ fixed: ref added as dependency
 }
+
 function TiltCard({ className, children }) {
   const ref = useRef(null); use3DTilt(ref);
   return <div className={className} ref={ref}>{children}</div>;
