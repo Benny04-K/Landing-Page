@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-const COLORS = {
+/* const COLORS = {
   bg: "#050a18",
   navy: "#0a1428",
   card: "#0d1a30",
@@ -11,7 +11,7 @@ const COLORS = {
   text: "#e8eaf6",
   muted: "#8899bb",
   border: "rgba(124,77,255,0.25)",
-};
+}; */
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
